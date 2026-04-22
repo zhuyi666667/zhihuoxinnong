@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>无菌组培苗数字化管理系统</title>
+  <link rel="stylesheet" href="style.css?v=20260422">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <!-- SVG 图标库（内联定义，无需网络，手机端100%兼容） -->
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="ic-dashboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+      <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+    </symbol>
+    <symbol id="ic-seedling" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 22V12"/><path d="M12 12C12 8 9 5 5 5c0 4 3 7 7 7z"/><path d="M12 12c0-4 3-7 7-7 0 4-3 7-7 7z"/>
+    </symbol>
+    <symbol id="ic-flask" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 3h6"/><path d="M10 3v6l-5 9a1 1 0 0 0 .9 1.5h12.2a1 1 0 0 0 .9-1.5l-5-9V3"/>
+      <line x1="6.5" y1="14" x2="17.5" y2="14"/>
+    </symbol>
+    <symbol id="ic-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+    </symbol>
+    <symbol id="ic-thermometer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>
+    </symbol>
+    <symbol id="ic-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+      <polyline points="22 4 12 14.01 9 11.01"/>
+    </symbol>
+    <symbol id="ic-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="21 8 21 21 3 21 3 8"/>
+      <rect x="1" y="3" width="22" height="5" rx="1"/>
+      <line x1="10" y1="12" x2="14" y2="12"/>
+    </symbol>
+    <symbol id="ic-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </symbol>
+    <symbol id="ic-clipboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+      <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+    </symbol>
+    <symbol id="ic-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/>
+      <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+    </symbol>
+    <symbol id="ic-wrench" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+    </symbol>
+    <symbol id="ic-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
+      <line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/>
+    </symbol>
+    <symbol id="ic-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+      <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+    </symbol>
+  </svg>
+</head>
+<body>
+  <!-- 粒子背景层 -->
+  <canvas id="particle-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.35"></canvas>
+  <div class="app-container">
+    <!-- 侧边栏（桌面端） -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <!-- 手机端关闭按钮 -->
+        <button class="sidebar-close-btn" id="sidebar-close-btn" onclick="App.closeSidebar()" aria-label="关闭菜单">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+        <div class="sidebar-logo">
+          <svg viewBox="0 0 32 32" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 28C16 20 10 14 4 13c0 7 5 13 12 15z" fill="rgba(255,255,255,0.9)"/>
+            <path d="M16 28C16 20 22 14 28 13c0 7-5 13-12 15z" fill="rgba(255,255,255,0.7)"/>
+            <path d="M16 6v22" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-linecap="round"/>
+            <ellipse cx="16" cy="8" rx="4" ry="6" fill="rgba(255,255,255,0.6)"/>
+          </svg>
+        </div>
+        <div class="sidebar-title">无菌组培苗</div>
+        <div class="sidebar-subtitle">数字化管理系统</div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-group">
+          <div class="nav-group-label">总览</div>
+          <div class="nav-item active" data-page="dashboard">
+            <span class="nav-icon"><svg width="16" height="16"><use href="#ic-dashboard"/></svg></span>
+            <span>看板总览</span>
+          </div>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-label">生产管理</div>
+          <div class="nav-item" data-page="seedlings">
+            <span class="nav-icon"><svg width="16" height="16"><use href="#ic-seedling"/></svg></span>
+            <span>种苗档案</span>
+          </div>
+          <div class="nav-item" data-page="culture">
+            <span class="nav-icon"><svg width="16" height="16"><use href="#ic-flask"/></svg></span>
+            <span>培养流程</span>
+          </div>
+          <div class="nav-item" data-page="traceability">
+            <span class="nav-icon"><svg width="16" height="16"><use href="#ic-link"/></svg></span>
+            <span>全流程溯源</span>
+          </div>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-label">监控管控</div>
+          <div class="nav-item" data-page="environment">
+            <span class="nav-icon"><svg width="16" height="16"><use href="#ic-thermometer"/></svg></span>
+            <span>环境监测</span>
+          </div>
+          <div class="nav-item" data-page="quality">
+            <span class="nav-icon"><svg width="16" height="16"><use href="#ic-check-circle"/></svg></span>
+            <span>质检管理</span>
+          </div>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-label">资源管理</div>
+          <div class="nav-item" data-page="materials">
+            <span class="nav-icon"><svg width="16" height="16"><use href="#ic-box"/></svg></span>
+            <span>物料管理</span>
+          </div>
+          <div class="nav-item" data-page="equipment">
+            <span class="nav-icon"><svg width="16" height="16"><use href="#ic-gear"/></svg></span>
+            <span>设备管理</span>
+          </div>
+          <div class="nav-item" data-page="inventory">
+            <span class="nav-icon"><svg width="16" height="16"><use href="#ic-clipboard"/></svg></span>
+            <span>库存管理</span>
+          </div>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-label">系统</div>
+          <div class="nav-item" data-page="system">
+            <span class="nav-icon"><svg width="16" height="16"><use href="#ic-wrench"/></svg></span>
+            <span>系统管理</span>
+          </div>
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-inner">
+          <span class="version-tag">v3.1</span>
+          <span>无菌组培苗系统 · 佛山高明</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+      <div class="page-header">
+        <div class="page-header-left">
+          <!-- 移动端 menu 按钮 -->
+          <button class="menu-toggle" id="menu-toggle" onclick="App.toggleSidebar()" aria-label="菜单">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <h2 id="page-title">看板总览</h2>
+        </div>
+        <div class="page-header-right">
+          <div class="header-time">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span id="current-date"></span>
+            <span class="time-sep">·</span>
+            <span id="current-time"></span>
+          </div>
+        </div>
+      </div>
+      <div class="page-body" id="page-body">
+      </div>
+    </main>
+  </div>
+
+  <!-- 移动端侧边栏遮罩 -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="App.toggleSidebar()"></div>
+
+  <!-- 更多菜单弹窗（移动端） -->
+  <div class="more-menu-overlay" id="more-menu-overlay" onclick="App.closeMoreMenu()">
+    <div class="more-menu-panel" onclick="event.stopPropagation()">
+      <div class="more-menu-header">全部功能</div>
+      <div class="more-menu-grid">
+        <div class="more-menu-item" onclick="App.navigate('dashboard');App.closeMoreMenu()">
+          <svg width="20" height="20"><use href="#ic-dashboard"/></svg>
+          <span>看板总览</span>
+        </div>
+        <div class="more-menu-item" onclick="App.navigate('seedlings');App.closeMoreMenu()">
+          <svg width="20" height="20"><use href="#ic-seedling"/></svg>
+          <span>种苗档案</span>
+        </div>
+        <div class="more-menu-item" onclick="App.navigate('culture');App.closeMoreMenu()">
+          <svg width="20" height="20"><use href="#ic-flask"/></svg>
+          <span>培养流程</span>
+        </div>
+        <div class="more-menu-item" onclick="App.navigate('traceability');App.closeMoreMenu()">
+          <svg width="20" height="20"><use href="#ic-link"/></svg>
+          <span>全流程溯源</span>
+        </div>
+        <div class="more-menu-item" onclick="App.navigate('environment');App.closeMoreMenu()">
+          <svg width="20" height="20"><use href="#ic-thermometer"/></svg>
+          <span>环境监测</span>
+        </div>
+        <div class="more-menu-item" onclick="App.navigate('quality');App.closeMoreMenu()">
+          <svg width="20" height="20"><use href="#ic-check-circle"/></svg>
+          <span>质检管理</span>
+        </div>
+        <div class="more-menu-item" onclick="App.navigate('materials');App.closeMoreMenu()">
+          <svg width="20" height="20"><use href="#ic-box"/></svg>
+          <span>物料管理</span>
+        </div>
+        <div class="more-menu-item" onclick="App.navigate('equipment');App.closeMoreMenu()">
+          <svg width="20" height="20"><use href="#ic-gear"/></svg>
+          <span>设备管理</span>
+        </div>
+        <div class="more-menu-item" onclick="App.navigate('inventory');App.closeMoreMenu()">
+          <svg width="20" height="20"><use href="#ic-clipboard"/></svg>
+          <span>库存管理</span>
+        </div>
+        <div class="more-menu-item" onclick="App.navigate('system');App.closeMoreMenu()">
+          <svg width="20" height="20"><use href="#ic-wrench"/></svg>
+          <span>系统管理</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部 Tab 导航（仅移动端） -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <div class="bottom-nav-item active" data-page="dashboard">
+      <svg width="20" height="20"><use href="#ic-dashboard"/></svg>
+      <span>总览</span>
+    </div>
+    <div class="bottom-nav-item" data-page="culture">
+      <svg width="20" height="20"><use href="#ic-flask"/></svg>
+      <span>培养</span>
+    </div>
+    <div class="bottom-nav-item" data-page="traceability">
+      <svg width="20" height="20"><use href="#ic-link"/></svg>
+      <span>溯源</span>
+    </div>
+    <div class="bottom-nav-item" data-page="environment">
+      <svg width="20" height="20"><use href="#ic-thermometer"/></svg>
+      <span>环境</span>
+    </div>
+    <div class="bottom-nav-item" data-page="more-menu" id="more-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/>
+      </svg>
+      <span>更多</span>
+    </div>
+  </nav>
+
+  <!-- 全局弹窗 -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-title">弹窗标题</h3>
+        <button class="modal-close" onclick="App.closeModal()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="App.closeModal()">取消</button>
+        <button class="btn btn-primary" onclick="App.closeModal(); App.showToast('操作成功', 'success')">确认</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="data.js?v=20260421m"></script>
+  <script src="views.js?v=20260421m"></script>
+  <script src="app.js?v=20260421m2"></script>
+  <script>
+    /* ---- 时钟 ---- */
+    function updateClock() {
+      const now = new Date();
+      const dateEl = document.getElementById('current-date');
+      const timeEl = document.getElementById('current-time');
+      if (dateEl) dateEl.textContent = now.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'short' });
+      if (timeEl) timeEl.textContent = now.toLocaleTimeString('zh-CN', { hour12: false, hour: '2-digit', minute: '2-digit' });
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    /* ---- 粒子背景 ---- */
+    (function initParticles() {
+      const canvas = document.getElementById('particle-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let W, H, particles = [];
+      const COUNT = 38;
+
+      function resize() {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      function randomParticle() {
+        return {
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: Math.random() * 3 + 1,
+          dx: (Math.random() - 0.5) * 0.4,
+          dy: -(Math.random() * 0.5 + 0.2),
+          alpha: Math.random() * 0.4 + 0.15,
+          color: Math.random() > 0.5 ? '#2e7d32' : '#66bb6a',
+          shape: Math.random() > 0.6 ? 'leaf' : 'dot'
+        };
+      }
+
+      for (let i = 0; i < COUNT; i++) particles.push(randomParticle());
+
+      function drawLeaf(x, y, size, alpha, color) {
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.translate(x, y);
+        ctx.rotate(Math.random() * 0.1);
+        ctx.beginPath();
+        ctx.moveTo(0, -size * 2);
+        ctx.bezierCurveTo(size * 1.2, -size, size * 1.2, size, 0, size * 2);
+        ctx.bezierCurveTo(-size * 1.2, size, -size * 1.2, -size, 0, -size * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, W, H);
+        particles.forEach((p, i) => {
+          if (p.shape === 'leaf') {
+            drawLeaf(p.x, p.y, p.r, p.alpha, p.color);
+          } else {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = p.alpha;
+            ctx.fill();
+            ctx.globalAlpha = 1;
+          }
+          p.x += p.dx;
+          p.y += p.dy;
+          if (p.y < -20 || p.x < -20 || p.x > W + 20) {
+            particles[i] = randomParticle();
+            particles[i].y = H + 10;
+          }
+        });
+        requestAnimationFrame(animate);
+      }
+      animate();
+    })();
+
+    /* ---- 数字滚动动画 ---- */
+    function animateCounter(el, target, duration) {
+      if (!el) return;
+      const start = 0;
+      const step = target / (duration / 16);
+      let current = start;
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= target) { current = target; clearInterval(timer); }
+        el.textContent = Math.floor(current).toLocaleString('zh-CN');
+      }, 16);
+    }
+
+    window.runCounters = function() {
+      document.querySelectorAll('[data-count]').forEach(el => {
+        const val = parseInt(el.getAttribute('data-count'));
+        animateCounter(el, val, 1200);
+      });
+    };
+
+    /* ---- 卡片入场动画（IntersectionObserver） ---- */
+    function initCardAnimations() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              entry.target.classList.add('anim-in');
+            }, i * 60);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.stat-card, .card, .trace-card').forEach(el => {
+        el.classList.add('anim-ready');
+        observer.observe(el);
+      });
+    }
+
+    /* ---- 按钮涟漪 ---- */
+    document.addEventListener('click', function(e) {
+      const btn = e.target.closest('.btn, .nav-item, .bottom-nav-item');
+      if (!btn) return;
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple-fx';
+      const rect = btn.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size/2}px;top:${e.clientY - rect.top - size/2}px`;
+      btn.style.position = btn.style.position || 'relative';
+      btn.style.overflow = 'hidden';
+      btn.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 600);
+    });
+
+    /* ---- 页面切换时重新触发入场动画 ---- */
+    const _origNavigate = window.App ? App.navigate.bind(App) : null;
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(initCardAnimations, 300);
+      setTimeout(window.runCounters, 100);
+    });
+
+    const _pageBodyObserver = new MutationObserver(() => {
+      setTimeout(initCardAnimations, 100);
+      setTimeout(window.runCounters, 200);
+    });
+    const pb = document.getElementById('page-body');
+    if (pb) _pageBodyObserver.observe(pb, { childList: true, subtree: false });
+  </script>
+</body>
+</html>
